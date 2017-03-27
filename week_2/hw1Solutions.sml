@@ -28,3 +28,7 @@ fun dates_in_month(datesList : (int * int * int) list, month : int) =
 fun dates_in_months(datesList : (int * int * int) list, monthsList: int list) =
   if null monthsList then []
   else dates_in_month(datesList, hd monthsList) @ dates_in_months(datesList, tl monthsList)
+
+fun get_nth(items : string list, index : int) =
+  if index = 1 then hd items
+  else get_nth(tl items, index - 1)
