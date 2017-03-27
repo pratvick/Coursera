@@ -11,29 +11,18 @@ fun countDown(a : int) =
 fun append(l1 : int list, l2 : int list) =
   if null l1 then l2
   else hd l1 :: append(tl l1, l2)
-			
-fun max(l1 : int list) =
-  if null l1 then 0
-  else if null (tl l1) then hd l1
-  else
-      let
-	  val p = max(tl l1)
-      in
-	  if hd l1 > p then hd l1
-	  else p	   
-      end
 
-fun max1(l1 : int list) =
+fun badMax(l1 : int list) =
   if null l1 then NONE
   else
       let
-	  val x = max1(tl l1)
+	  val x = badMax(tl l1)
       in
 	  if isSome x andalso valOf x > hd l1 then x
 	  else SOME (hd l1)
       end
 
-fun max2(l1 : int list) =
+fun goodMax(l1 : int list) =
   if null l1 then NONE
   else let
 	  fun maxNonEmpty(l1 : int list) =
@@ -47,17 +36,3 @@ fun max2(l1 : int list) =
       in
 	  SOME(maxNonEmpty l1)
       end
-	  
-	       
-	  
-		       
-
-
-
-
-	  
-	   
-      
-      
-	  
-      
