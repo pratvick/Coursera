@@ -24,3 +24,7 @@ fun dates_in_month(datesList : (int * int * int) list, month : int) =
       if (#2 (hd datesList)) = month then (hd datesList) :: datesListInRemList
       else datesListInRemList
   end
+
+fun dates_in_months(datesList : (int * int * int) list, monthsList: int list) =
+  if null monthsList then []
+  else dates_in_month(datesList, hd monthsList) @ dates_in_months(datesList, tl monthsList)
