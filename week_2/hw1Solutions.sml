@@ -43,3 +43,10 @@ fun date_to_string(date : int * int * int) =
 fun number_before_reaching_sum(sum : int, numbers : int list) =
   if (sum - (hd numbers)) <= 0 then 0
   else 1 + number_before_reaching_sum(sum - (hd numbers), tl numbers)
+
+fun what_month(day : int) =
+  let
+      val days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  in
+      1 + number_before_reaching_sum(day, days)
+  end
