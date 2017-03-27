@@ -15,4 +15,12 @@ fun number_in_month(datesList : (int * int * int) list, month : int) =
 fun number_in_months(datesList : (int * int * int) list, monthsList : int list) =
   if null monthsList then 0
   else number_in_month(datesList, hd monthsList) + number_in_months(datesList, tl monthsList)
-      
+
+fun dates_in_month(datesList : (int * int * int) list, month : int) =
+  if null datesList then []
+  else let
+      val datesListInRemList = dates_in_month(tl datesList, month)
+  in
+      if (#2 (hd datesList)) = month then (hd datesList) :: datesListInRemList
+      else datesListInRemList
+  end
