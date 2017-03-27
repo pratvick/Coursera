@@ -11,3 +11,8 @@ fun number_in_month(datesList : (int * int * int) list, month : int) =
       if (#2 (hd datesList)) = month then 1 + numOfMonthsInRemList
       else numOfMonthsInRemList
   end
+
+fun number_in_months(datesList : (int * int * int) list, monthsList : int list) =
+  if null monthsList then 0
+  else number_in_month(datesList, hd monthsList) + number_in_months(datesList, tl monthsList)
+      
