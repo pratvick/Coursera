@@ -50,14 +50,14 @@ fun month_range(day1 : int, day2 : int) =
 fun oldest(dates : (int * int * int) list) =
   if null dates then NONE
   else let
-      fun oldestNonEmpty(dates : (int * int * int) list) =
+      fun oldest_non_empty(dates : (int * int * int) list) =
 	if null (tl dates) then hd dates
 	else let
-	    val oldestDate = oldestNonEmpty(tl dates)
+	    val oldestDate = oldest_non_empty(tl dates)
 	in
 	    if is_older(oldestDate, hd dates) then oldestDate
 	    else hd dates
 	end
   in
-      SOME (oldestNonEmpty dates)
+      SOME (oldest_non_empty dates)
   end
