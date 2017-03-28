@@ -5,12 +5,8 @@ fun is_older(date1 : int * int * int, date2 : int * int * int) =
 
 fun number_in_month(datesList : (int * int * int) list, month : int) =
   if null datesList then 0
-  else let
-      val numOfMonthsInRemList = number_in_month(tl datesList, month)
-  in
-      if (#2 (hd datesList)) = month then 1 + numOfMonthsInRemList
-      else numOfMonthsInRemList
-  end
+  else if (#2 (hd datesList)) = month then 1 + number_in_month(tl datesList, month)
+  else number_in_month(tl datesList, month)
 
 fun number_in_months(datesList : (int * int * int) list, monthsList : int list) =
   if null monthsList then 0
@@ -18,12 +14,8 @@ fun number_in_months(datesList : (int * int * int) list, monthsList : int list) 
 
 fun dates_in_month(datesList : (int * int * int) list, month : int) =
   if null datesList then []
-  else let
-      val datesListInRemList = dates_in_month(tl datesList, month)
-  in
-      if (#2 (hd datesList)) = month then (hd datesList) :: datesListInRemList
-      else datesListInRemList
-  end
+  else if (#2 (hd datesList)) = month then (hd datesList) :: dates_in_month(tl datesList, month)
+  else dates_in_month(tl datesList, month)
 
 fun dates_in_months(datesList : (int * int * int) list, monthsList: int list) =
   if null monthsList then []
