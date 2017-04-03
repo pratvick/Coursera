@@ -146,3 +146,14 @@ fun score (cs, goal) =
       if all_same_color cs then prelim_score(cs, goal) div 2
       else prelim_score(cs, goal)
   end
+
+fun officiate(clst : card list, mlst : move list, goal : int) =
+  let fun play(clst, mlst, goal, hlst) =
+	case mlst of
+	    [] => score(hlst, goal)
+	  | Draw::mlst' => if null_func clst orelse sum_cards((hd_func clst)::hlst) > goal then score(hlst, goal)
+			   else play(tl_func clst, tl_func mlst, goal, (hd_func clst)::hlst)
+	  | (Discard c)::mlst' => play(clst, tl_func mlst, goal, remove_card(hlst, c, IllegalMove))
+  in
+      play(clst, mlst, goal, [])
+  end
