@@ -151,9 +151,10 @@ fun officiate(clst : card list, mlst : move list, goal : int) =
   let fun play(clst, mlst, hlst) =
 	case mlst of
 	    [] => score(hlst, goal)
-	  | Draw::mlst' => if null_func clst orelse sum_cards((hd_func clst)::hlst) > goal then score(hlst, goal)
-			   else play(tl_func clst, tl_func mlst, (hd_func clst)::hlst)
-	  | (Discard c)::mlst' => play(clst, tl_func mlst, remove_card(hlst, c, IllegalMove))
+	  | (Discard c)::mlst' => play(clst, mlst', remove_card(hlst, c, IllegalMove))
+	  | Draw::mlst' => if null_func clst then score(hlst, goal)
+			   else if sum_cards((hd_func clst)::hlst) > goal then score((hd_func clst)::hlst, goal)
+			   else play(tl_func clst, mlst', (hd_func clst)::hlst)
   in
       play(clst, mlst, [])
   end
