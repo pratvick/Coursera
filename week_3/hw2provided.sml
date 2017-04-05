@@ -26,69 +26,45 @@ fun null_func xs =
       [] => true
     | x::xs' => false
 
-fun first_name {first=x, middle=y, last=z} = x
-
-fun middle_name {first=x, middle=y, last=z} = y
-
-fun last_name {first=x, middle=y, last=z} = z
-
-fun string_not_present(s : string, lst : string list) =
-  if null_func lst then true
-  else if same_string(hd_func lst, s) then false
-  else string_not_present(s, tl_func lst)
-
-fun reverse_list xs =
-  let
-      fun aux(xs, acc) =
-	case xs of
-	    [] => acc
-	  | x::xs' => aux(xs', x::acc)
-  in
-      aux(xs, [])
-  end
-
 fun all_except_option(s : string, lst : string list) =
-  let val stringNotPresent = string_not_present(s, lst)
-  in
-      if null_func lst orelse stringNotPresent then NONE
-      else if same_string(hd_func lst, s) then SOME(tl_func lst)
-      else let val remList = all_except_option(s, tl_func lst)
-	   in
-	       if isSome_func remList then SOME((hd_func lst)::(valOf_func remList))
-	       else
-		   SOME((hd_func lst)::[])
-	   end
-  end
+  case lst of
+      [] => NONE
+    | head::tail => if same_string(s, head)
+                then SOME tail
+                else case all_except_option(s, tail) of
+                         NONE => NONE
+                       | SOME y => SOME(head :: y)
 
 fun get_substitutions1(lst : string list list, s : string) =
-  if null_func lst then []
-  else let val ansList = all_except_option(s, hd_func lst)
-       in
-	   if isSome_func ansList then ((valOf_func ansList) @ get_substitutions1(tl_func lst, s))
-	   else
-	       get_substitutions1(tl_func lst, s)
-       end
+  case lst of
+      [] => []
+    | head::tail => case all_except_option(s, head) of
+			NONE => get_substitutions1(tail, s)
+		      | SOME y => y @ get_substitutions1(tail, s)
 
 fun get_substitutions2(lst : string list list, s : string) =
-  if null_func lst then []
-  else let val ansList = all_except_option(s, hd_func lst)
-       in
-	   if isSome_func ansList then ((valOf_func ansList) @ get_substitutions2(tl_func lst, s))
-	   else
-	       get_substitutions2(tl_func lst, s)
-       end
+  let
+      fun aux (acc, lst_left) =
+	case lst_left of
+	    [] => acc
+	  | head::tail => aux ((case all_except_option(s, head) of
+                                NONE => acc
+                              | SOME y => acc @ y),
+                               tail)
+  in
+      aux([], lst)
+  end
 
 fun similar_names(lst : string list list, name : {first:string, middle:string, last:string}) =
-  if null_func lst then [name]
-  else
-      let
-	  fun make_record_list(lst : string list, mname : string, lname : string, recordList : {first:string, middle:string, last:string} list) =
-	    if null_func lst then recordList
-	    else
-		make_record_list(tl_func lst, mname, lname, ({first=(hd_func lst), middle=mname, last=lname}::recordList))
-      in
-	  make_record_list(reverse_list((first_name name)::get_substitutions1(lst, (first_name name))), middle_name name, last_name name, [])
-      end
+  let
+      val {first=f, middle=m, last=l} = name
+      fun make_names xs =
+	case xs of
+	    [] => []
+	  | x::xs' => {first=x, middle=m, last=l}::(make_names(xs'))
+  in
+      name::make_names(get_substitutions2(lst, f))
+  end
 
 datatype suit = Clubs | Diamonds | Hearts | Spades
 datatype rank = Jack | Queen | King | Ace | Num of int 
