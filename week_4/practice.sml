@@ -10,7 +10,7 @@ fun n_times(f, n, x) =
   else
       f(n_times(f, n - 1, x))
 
-fun addition(n, x) = n_times(inc, n, x)
+fun addition(n, x) = n_times(inc, n, x) (* inc(inc(inc(inc 0))) if n = 4 *)
 fun nth_tail(n, xs) = n_times(tl, n, xs)
 
 (* Anonymous functions *)
@@ -37,7 +37,7 @@ fun allShorterThan(s, xs) =
   let
       val i = String.size s
   in
-      filter(fn x => String.size x < String.size s, xs)
+      filter(fn x => String.size x < i, xs)
   end
 
 (* Functions returning functions *)
@@ -46,7 +46,7 @@ fun double_or_triple f =
   if f 7 then fn x => 2 * x
   else fn x => 3 * x
 
-val double = double_or_triple(fn x => x - 3 = 4)
+val double = double_or_triple(fn x => (x - 3) = 4)
 val nine = (double_or_triple(fn x => x = 42)) 3
 
 datatype exp = Constant of int
@@ -107,14 +107,15 @@ val sum = fold (fn (x, y) => x + y) 0
 fun range i j = if i < j then [] else i :: range (i+1) j
 val countup = range 1
 
-fun exists predicate xs =
+fun exists f xs =
   case xs of
       [] => false
-    | x::xs' => predicate x orelse exists predicate xs'
+    | x::xs' => f x orelse exists f xs'
 val hasZero = exists (fn x => x = 0)
 
 val incrementAll = List.map (fn x => x + 1)
 val removeZeros = List.filter (fn x => x <> 0)
+fun incrementAllElements xs = incrementAll xs
 
 (* Tupled to Curried *)
 
